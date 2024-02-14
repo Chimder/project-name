@@ -5,23 +5,11 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createUserDto: any) {
-    return 'This action adds a new user';
+  findByEmail(email: string) {
+    return this.prisma.user.findFirst({ where: { email: email } });
   }
 
-  findAll() {
-    return `This action returns all user`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  update(id: number, updateUserDto: any) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  create(email: string, hash: string, salt: string) {
+    return this.prisma.user.create({ data: { email, hash, salt } });
   }
 }
