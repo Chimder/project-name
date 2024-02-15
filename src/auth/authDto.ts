@@ -1,9 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsNotEmpty } from 'class-validator';
 
 export class singUpBodyDto {
+  @IsEmail()
   @ApiProperty({ example: 'lol@gmail.com' })
   email: string;
 
+  @IsNotEmpty()
   @ApiProperty({ example: '1234' })
   password: string;
 }

@@ -5,7 +5,6 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -55,6 +54,7 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
   singOut(@Res({ passthrough: true }) res: Response) {
+    console.log('Out', res);
     this.cookieService.removeToken(res);
   }
 
