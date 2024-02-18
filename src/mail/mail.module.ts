@@ -1,39 +1,41 @@
-import { Module } from '@nestjs/common';
-import { MailController } from './mail.controller';
-import { MailService } from './mail.service';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { BullModule } from '@nestjs/bull';
-import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { Global, Module } from '@nestjs/common';
+import { MailService } from './mail.service';
 import { join } from 'path';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MailController } from './mail.controller';
 
+@Global()
 @Module({
   imports: [
-    BullModule,
-    MailerModule.forRoot({
-      transport: {
-        host: 'smtp-mail.outlook.com',
-        port: 587,
-        secure: true,
-        auth: {
-          user: process.env.OUTLOOK_LOGIN,
-          pass: process.env.OUTLOOK_PASSWORD,
+    MailerModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (config: ConfigService) => ({
+        transport: {
+          host: config.get('MAIL_HOST'),
+          secure: false,
+          auth: {
+            user: config.get('MAIL_USER'),
+            pass: config.get('MAIL_PASSWORD'),
+          },
         },
-        requireTLS: true,
-      },
-      defaults: {
-        from: '"No Reply" <noreply@example.com>',
-      },
-      template: {
-        dir: join(__dirname, 'templates'),
-        adapter: new EjsAdapter(),
-        options: {
-          strict: true,
+        defaults: {
+          from: `"No Reply" <${config.get('MAIL_FROM')}>`,
         },
-      },
+        template: {
+          // dir: join(__dirname, 'templates'),
+          adapter: new HandlebarsAdapter(),
+          options: {
+            strict: true,
+          },
+        },
+      }),
+      inject: [ConfigService],
     }),
   ],
   controllers: [MailController],
   providers: [MailService],
-  exports: [BullModule],
+  exports: [MailService],
 })
 export class MailModule {}

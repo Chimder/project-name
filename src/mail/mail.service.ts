@@ -6,16 +6,16 @@ export class MailService {
   constructor(private readonly mailerService: MailerService) {}
 
   async getMail(email: string) {
-    // const username = 'dimas';
-    // const resetUrl = 'lol.com';
+    console.log(email);
     await this.mailerService.sendMail({
       to: email,
       subject: 'Reset Your Password',
-      template: '/reset-password',
-      // context: {
-      //   username: 'John Doe',
-      //   resetUrl: 'https://example.com/reset-password',
-      // },
+      // template: '/reset-password',
+      template: 'src/mail/templates/reset-password',
+      context: {
+        name: 'John Doe',
+        url: 'https://example.com/reset-password',
+      },
     });
   }
 }
