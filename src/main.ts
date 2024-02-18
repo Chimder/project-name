@@ -4,6 +4,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as cookieParser from 'cookie-parser';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 import { ValidationPipe } from '@nestjs/common';
+import * as fs from 'fs';
+import * as https from 'https';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

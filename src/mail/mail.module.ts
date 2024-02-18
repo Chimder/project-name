@@ -24,6 +24,7 @@ import { join } from 'path';
         from: '"No Reply" <noreply@example.com>',
       },
       template: {
+        dir: join(__dirname, 'templates'),
         adapter: new EjsAdapter(),
         options: {
           strict: true,
