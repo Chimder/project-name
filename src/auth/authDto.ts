@@ -6,14 +6,21 @@ export class singUpBodyDto {
   @ApiProperty({ example: 'lol@gmail.com' })
   email: string;
 
+  @ApiProperty({ example: 'lol' })
+  name: string;
+
   @IsNotEmpty()
   @ApiProperty({ example: '1234' })
   password: string;
 }
+export class isNameTaken {
+  @ApiProperty({ example: 'lol' })
+  name: string;
+}
 
 export class singInBodyDto {
-  @ApiProperty({ example: 'lol@gmail.com' })
-  email: string;
+  @ApiProperty({ example: 'lol' })
+  identifier: string;
 
   @ApiProperty({ example: '1234' })
   password: string;

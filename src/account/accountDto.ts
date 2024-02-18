@@ -9,6 +9,9 @@ export class AccountDto {
   ownerId: string;
 
   @ApiProperty()
+  name: string;
+
+  @ApiProperty()
   @IsBoolean()
   isBlocking: boolean;
 }

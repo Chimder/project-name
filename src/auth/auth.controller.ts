@@ -5,16 +5,23 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  Query,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { getSessionDto, singInBodyDto, singUpBodyDto } from './authDto';
+import {
+  getSessionDto,
+  isNameTaken,
+  singInBodyDto,
+  singUpBodyDto,
+} from './authDto';
 import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { CookieService } from './cookie.service';
 import { AuthGuard } from './auth.guard';
 import { SessionInfo } from './session-info.decorator';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 
 @Controller('auth')
 export class AuthController {
@@ -31,11 +38,13 @@ export class AuthController {
     const { accessToken } = await this.authService.signUp(
       body.email,
       body.password,
+      body.name,
     );
     this.cookieService.setToken(res, accessToken);
   }
 
   @Post('sing-in')
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   @ApiOkResponse()
   @HttpCode(HttpStatus.OK)
   async singIn(
@@ -43,22 +52,30 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     const { accessToken } = await this.authService.signIn(
-      body.email,
+      body.identifier,
       body.password,
     );
     this.cookieService.setToken(res, accessToken);
   }
 
+  @Post('isNameTake')
+  @ApiOkResponse({ type: isNameTaken })
+  @HttpCode(HttpStatus.OK)
+  async isNameTake(@Query('name') name: string) {
+    return this.authService.isNameTaken(name);
+  }
+
   @Post('sing-out')
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   @ApiOkResponse()
   @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.OK)
   singOut(@Res({ passthrough: true }) res: Response) {
-    console.log('Out', res);
     this.cookieService.removeToken(res);
   }
 
   @Get('session')
+  @SkipThrottle({ default: false })
   @ApiOkResponse({
     type: getSessionDto,
   })

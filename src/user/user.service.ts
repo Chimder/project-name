@@ -12,10 +12,19 @@ export class UserService {
   findByEmail(email: string) {
     return this.prisma.user.findFirst({ where: { email: email } });
   }
+  findByEmailOrName(identifier: string) {
+    return this.prisma.user.findFirst({
+      where: {
+        OR: [{ email: identifier }, { name: identifier }],
+      },
+    });
+  }
 
-  async create(email: string, hash: string, salt: string) {
-    const user = await this.prisma.user.create({ data: { email, hash, salt } });
-    await this.accountService.createAccount(user.id);
+  async create(email: string, hash: string, salt: string, name: string) {
+    const user = await this.prisma.user.create({
+      data: { email, hash, salt, name },
+    });
+    await this.accountService.createAccount(user.id, user.name);
     return user;
   }
 }

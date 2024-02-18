@@ -17,9 +17,9 @@ export class AccountService {
     });
   }
 
-  createAccount(userId: number) {
+  createAccount(userId: number, name: string) {
     return this.prisma.account.create({
-      data: { ownerId: userId, isBlocking: false },
+      data: { ownerId: userId, isBlocking: false, name: name },
     });
   }
 }

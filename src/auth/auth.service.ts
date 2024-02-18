@@ -2,15 +2,17 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { PasswordService } from './password.service';
 import { JwtService } from '@nestjs/jwt';
+import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private passwordService: PasswordService,
     private jwtService: JwtService,
+    private prisma: PrismaService,
   ) {}
 
-  async signUp(email: string, password: string) {
+  async signUp(email: string, password: string, name: string) {
     const user = await this.userService.findByEmail(email);
     if (user) {
       throw new UnauthorizedException();
@@ -19,15 +21,25 @@ export class AuthService {
     const salt = this.passwordService.getSalt();
     const hash = this.passwordService.getHash(password, salt);
 
-    const newUser = await this.userService.create(email, hash, salt);
+    const newUser = await this.userService.create(email, hash, salt, name);
     const accessToken = await this.jwtService.signAsync({
       id: newUser.id,
       email: newUser.email,
     });
     return { accessToken };
   }
-  async signIn(email: string, password: string) {
-    const user = await this.userService.findByEmail(email);
+
+  async isNameTaken(name: string) {
+    const is = await this.prisma.user.findFirst({ where: { name: name } });
+    if (!is) {
+      return true;
+    }
+    return false;
+  }
+
+  async signIn(identifier: string, password: string) {
+    // const user = await this.userService.findByEmail(email);
+    const user = await this.userService.findByEmailOrName(identifier);
     if (!user) {
       throw new UnauthorizedException();
     }

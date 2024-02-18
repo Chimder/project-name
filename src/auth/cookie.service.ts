@@ -13,6 +13,10 @@ export class CookieService {
     });
   }
   removeToken(res: Response) {
-    res.clearCookie(CookieService.tokenKey);
+    res.clearCookie(CookieService.tokenKey, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+    });
   }
 }

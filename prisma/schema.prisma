@@ -11,14 +11,25 @@ model User {
   id    Int    @id @default(autoincrement())
   email String @unique
   hash  String
+  name  String
   salt  String
 
-  account Account?
+  createdAt DateTime @default(now())
+  account   Account?
 }
 
 model Account {
-  id         Int     @id @default(autoincrement())
-  ownerId    Int     @unique
-  owner      User    @relation(fields: [ownerId], references: [id])
+  id      Int    @id @default(autoincrement())
+  name    String
+  ownerId Int    @unique
+  owner   User   @relation(fields: [ownerId], references: [id])
+
   isBlocking Boolean
+  createdAt  DateTime @default(now())
+  role       Role     @default(USER)
+}
+
+enum Role {
+  USER
+  ADMIN
 }
