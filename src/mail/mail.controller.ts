@@ -11,6 +11,6 @@ export class MailController {
   // @ApiResponse({ type: MailDto })
   @ApiOkResponse()
   getMail(@Query('email') email: string) {
-    return this.mailservice.getMail(email);
+    // return this.mailservice.getMail(email,token);
   }
 }

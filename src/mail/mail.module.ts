@@ -21,7 +21,7 @@ import { MailController } from './mail.controller';
           },
         },
         defaults: {
-          from: `"No Reply" <${config.get('MAIL_FROM')}>`,
+          from: `"tritch-vite.vercel.app" <${config.get('MAIL_FROM')}>`,
         },
         template: {
           // dir: join(__dirname, 'templates'),

@@ -5,16 +5,17 @@ import { Injectable } from '@nestjs/common';
 export class MailService {
   constructor(private readonly mailerService: MailerService) {}
 
-  async getMail(email: string) {
+  async getMail(email: string, token: string) {
     console.log(email);
+    const url = `http://localhost:5173/reset-password?token=${token}`;
     await this.mailerService.sendMail({
       to: email,
       subject: 'Reset Your Password',
       // template: '/reset-password',
       template: 'src/mail/templates/reset-password',
       context: {
-        name: 'John Doe',
-        url: 'https://example.com/reset-password',
+        // token: token,
+        url: url,
       },
     });
   }

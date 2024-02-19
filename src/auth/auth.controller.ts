@@ -22,12 +22,14 @@ import { CookieService } from './cookie.service';
 import { AuthGuard } from './auth.guard';
 import { SessionInfo } from './session-info.decorator';
 import { SkipThrottle, Throttle } from '@nestjs/throttler';
+import { MailService } from 'src/mail/mail.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
     private cookieService: CookieService,
+    private emailService: MailService,
   ) {}
   @Post('sing-up')
   @ApiCreatedResponse()
@@ -82,5 +84,27 @@ export class AuthController {
   @UseGuards(AuthGuard)
   getSessionInfo(@SessionInfo() session: getSessionDto) {
     return session;
+  }
+
+  @Post('resetPassReq')
+  async requestPasswordReset(
+    @Query('email') email: string,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const { resetToken } = await this.authService.requestPasswordReset(email);
+    await this.emailService.getMail(email, resetToken);
+    this.cookieService.setResetToken(res, resetToken);
+  }
+  @Post('resetPassword')
+  async PasswordReset(
+    @Query('token') token: string,
+    @Res({ passthrough: true }) res: Response,
+    @Query('newpassword') newpassword: string,
+  ) {
+    const { accessToken } = await this.authService.resetPassword(
+      token,
+      newpassword,
+    );
+    this.cookieService.setToken(res, accessToken);
   }
 }

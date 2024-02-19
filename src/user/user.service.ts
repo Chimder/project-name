@@ -19,6 +19,16 @@ export class UserService {
       },
     });
   }
+  async userUpdate(email: string, hash: string, salt: string) {
+    const updateUser = await this.prisma.user.update({
+      where: { email: email },
+      data: { hash, salt },
+    });
+    return
+  }
+  findById(userId: number) {
+    return this.prisma.user.findFirst({ where: { id: userId } });
+  }
 
   async create(email: string, hash: string, salt: string, name: string) {
     const user = await this.prisma.user.create({

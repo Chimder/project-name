@@ -55,4 +55,38 @@ export class AuthService {
     });
     return { accessToken };
   }
+  async requestPasswordReset(email: string) {
+    const user = await this.userService.findByEmail(email);
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+    const resetToken = await this.jwtService.signAsync(
+      { userEmail: user.email },
+      { expiresIn: '1h' },
+    );
+    return { resetToken };
+  }
+
+  async resetPassword(token: string, newPassword: string) {
+    const decodedToken = await this.jwtService.verifyAsync(token);
+    if (!decodedToken) throw new UnauthorizedException('Invalid token');
+    console.log('DECODEDTOKEN', decodedToken);
+
+    const { userEmail } = decodedToken;
+
+    const user = await this.userService.findByEmail(userEmail);
+    if (!user) throw new UnauthorizedException('Invalid token');
+
+    const salt = this.passwordService.getSalt();
+    const hash = this.passwordService.getHash(newPassword, salt);
+
+    await this.userService.userUpdate(userEmail, hash, salt);
+
+    const accessToken = await this.jwtService.signAsync({
+      id: user.id,
+      email: user.email,
+    });
+    return { accessToken };
+  }
 }
