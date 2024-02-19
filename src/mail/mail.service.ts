@@ -7,7 +7,7 @@ export class MailService {
 
   async getMail(email: string, token: string) {
     console.log(email);
-    const url = `http://localhost:5173/reset-password?token=${token}`;
+    const url = `http://localhost:5173/reset-password/${token}`;
     await this.mailerService.sendMail({
       to: email,
       subject: 'Reset Your Password',

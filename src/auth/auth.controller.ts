@@ -87,19 +87,18 @@ export class AuthController {
   }
 
   @Post('resetPassReq')
-  async requestPasswordReset(
-    @Query('email') email: string,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  @ApiOkResponse()
+  async requestPasswordReset(@Query('email') email: string) {
     const { resetToken } = await this.authService.requestPasswordReset(email);
     await this.emailService.getMail(email, resetToken);
-    this.cookieService.setResetToken(res, resetToken);
   }
+
   @Post('resetPassword')
+  @ApiOkResponse()
   async PasswordReset(
     @Query('token') token: string,
+    @Query('newPassword') newpassword: string,
     @Res({ passthrough: true }) res: Response,
-    @Query('newpassword') newpassword: string,
   ) {
     const { accessToken } = await this.authService.resetPassword(
       token,

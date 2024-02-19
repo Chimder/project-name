@@ -55,6 +55,7 @@ export class AuthService {
     });
     return { accessToken };
   }
+
   async requestPasswordReset(email: string) {
     const user = await this.userService.findByEmail(email);
 
