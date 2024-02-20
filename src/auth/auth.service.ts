@@ -38,7 +38,6 @@ export class AuthService {
   }
 
   async signIn(identifier: string, password: string) {
-    // const user = await this.userService.findByEmail(email);
     const user = await this.userService.findByEmailOrName(identifier);
     if (!user) {
       throw new UnauthorizedException();
@@ -72,7 +71,6 @@ export class AuthService {
   async resetPassword(token: string, newPassword: string) {
     const decodedToken = await this.jwtService.verifyAsync(token);
     if (!decodedToken) throw new UnauthorizedException('Invalid token');
-    console.log('DECODEDTOKEN', decodedToken);
 
     const { userEmail } = decodedToken;
 

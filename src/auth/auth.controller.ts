@@ -77,7 +77,7 @@ export class AuthController {
   }
 
   @Get('session')
-  @SkipThrottle({ default: false })
+  @SkipThrottle()
   @ApiOkResponse({
     type: getSessionDto,
   })
@@ -87,6 +87,7 @@ export class AuthController {
   }
 
   @Post('resetPassReq')
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   @ApiOkResponse()
   async requestPasswordReset(@Query('email') email: string) {
     const { resetToken } = await this.authService.requestPasswordReset(email);
@@ -94,6 +95,7 @@ export class AuthController {
   }
 
   @Post('resetPassword')
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
   @ApiOkResponse()
   async PasswordReset(
     @Query('token') token: string,

@@ -17,12 +17,12 @@ import { MailModule } from 'src/mail/mail.module';
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1d' },
+      signOptions: { expiresIn: '100d' },
     }),
     ThrottlerModule.forRoot([
       {
         ttl: 60000,
-        limit: 5,
+        limit: 10,
       },
     ]),
   ],
