@@ -13,17 +13,10 @@ export class CookieService {
       secure: true,
     });
   }
+
   removeToken(res: Response) {
     res.clearCookie(CookieService.tokenKey, {
       httpOnly: true,
-      sameSite: 'none',
-      secure: true,
-    });
-  }
-
-  setResetToken(res: Response, token: string) {
-    res.cookie(CookieService.tokenKeyReset, token, {
-      maxAge: 60 * 60 * 1000,
       sameSite: 'none',
       secure: true,
     });
