@@ -78,9 +78,7 @@ export class AuthService {
 
     const salt = this.passwordService.getSalt();
     const hash = this.passwordService.getHash(newPassword, salt);
-
     await this.userService.userUpdate(userEmail, hash, salt);
-
     const accessToken = await this.jwtService.signAsync({
       id: user.id,
       email: user.email,
