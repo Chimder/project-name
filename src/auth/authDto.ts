@@ -25,11 +25,9 @@ export class singInBodyDto {
   @ApiProperty({ example: '1234' })
   password: string;
 }
-
 export class getSessionDto {
   @ApiProperty()
   id: number;
-
   @ApiProperty()
   email: string;
 
