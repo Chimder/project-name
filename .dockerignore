@@ -1,0 +1,14 @@
+**/.npm
+**/.pnpm
+**/.yarn
+**/.idea
+**/.vscode
+**/.env
+**/.env.*
+
+# Игнорируем node_modules, если он находится в корне проекта
+node_modules
+
+# Исключаем файлы, созданные при сборке проекта
+dist
+coverage

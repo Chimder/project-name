@@ -1,0 +1,17 @@
+version: '4.27.2'
+
+services:
+  nestjs-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    container_name: nestjs-prod
+    restart: unless-stopped
+    ports:
+      - '4001:4000'
+    volumes:
+      - .:/app
+    environment:
+      PORT: 4000
+      DATABASE_URL: ${DATABASE_URL}
+    working_dir: /app
