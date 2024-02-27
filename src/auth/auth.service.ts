@@ -71,7 +71,6 @@ export class AuthService {
   async resetPassword(token: string, newPassword: string) {
     const decodedToken = await this.jwtService.verifyAsync(token);
     if (!decodedToken) throw new UnauthorizedException('Invalid token');
-
     const { userEmail } = decodedToken;
 
     const user = await this.userService.findByEmail(userEmail);
