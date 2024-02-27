@@ -18,7 +18,7 @@ import { MailModule } from 'src/mail/mail.module';
       global: true,
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '100d' },
-    }),
+}),
     ThrottlerModule.forRoot([
       {
         ttl: 60000,
