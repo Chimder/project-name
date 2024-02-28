@@ -10,5 +10,5 @@ WORKDIR /app
 COPY --from=build /app/dist ./dist
 ADD *.json .
 RUN npm ci --only=production
-EXPOSE 4000
+# EXPOSE 000
 CMD [ "npm", "run", "start:dev" ]
