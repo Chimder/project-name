@@ -7,7 +7,7 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+
   const config = new DocumentBuilder()
     .setTitle('Tritch auth')
     .setDescription('for auth test')
@@ -27,7 +27,7 @@ async function bootstrap() {
 
   const port = process.env.PORT ?? 4000;
   // await app.listen(port);
-  await app.listen(4000);
+  await app.listen(8000);
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
