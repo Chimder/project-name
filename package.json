@@ -6,9 +6,9 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
+    "build": "prisma generate && nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
+    "start": "prisma generate && nest start",
     "start:dev": "prisma generate && nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "prisma generate && node dist/main",
@@ -31,6 +31,7 @@
     "@nestjs/swagger": "^7.3.0",
     "@nestjs/throttler": "^5.1.2",
     "@prisma/client": "^5.9.1",
+    "@vercel/kv": "^1.0.1",
     "bull": "^4.12.2",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
@@ -39,7 +40,8 @@
     "ioredis": "^5.3.2",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "vercel": "^33.5.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
