@@ -1,7 +1,7 @@
 FROM node:21-alpine3.18 as build
 WORKDIR /app
 ADD *.json ./
-RUN npm ci
+RUN npm
 COPY . .
 RUN npm run build
 
@@ -9,7 +9,7 @@ FROM node:21-alpine3.18
 WORKDIR /app
 COPY --from=build /app/dist ./dist
 ADD *.json ./
-RUN npm ci --omit=dev
+RUN npm --omit=dev
 COPY . .
 RUN rm -rf ./src
 # EXPOSE 4001
