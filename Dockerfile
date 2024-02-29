@@ -1,7 +1,7 @@
 FROM node:21-alpine3.18 as build
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 COPY . .
 RUN npm run build
 RUN npx prisma generate
@@ -10,7 +10,7 @@ FROM node:21-alpine3.18
 WORKDIR /app
 COPY --from=build /app/dist ./dist
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm install
 RUN npm install -g prisma
 CMD [ "npm","run", "start:prod" ]
 
