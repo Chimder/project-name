@@ -8,17 +8,15 @@ services:
     container_name: nestjs-app
     restart: unless-stopped
     ports:
-      - '4000:4000'
+      - '8000:8000'
     volumes:
       - .:/app
     environment:
-      PORT: 4000
+      PORT: 8000
       DATABASE_URL: ${DATABASE_URL}
     working_dir: /app
     links:
       - redis
-    env_file:
-      - .env
     networks:
       - webnet
     depends_on:
