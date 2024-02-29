@@ -10,4 +10,4 @@ WORKDIR /app
 COPY --from=build /app/dist ./dist
 ADD *.json .
 RUN npm ci --omit=dev
-CMD [ "node", "./dist/main.js" ]
+CMD [ "npm","run", "start:prod" ]
