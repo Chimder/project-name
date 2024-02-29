@@ -4,13 +4,14 @@ COPY package*.json ./
 RUN npm ci
 COPY . .
 RUN npm run build
-# RUN npx prisma generate
+RUN npx prisma generate
 
 FROM node:21-alpine3.18
 WORKDIR /app
 COPY --from=build /app/dist ./dist
 COPY package*.json ./
 RUN npm ci --omit=dev
+RUN npm install -g prisma
 CMD [ "npm","run", "start:prod" ]
 
 # FROM node:21-alpine3.18 as build
