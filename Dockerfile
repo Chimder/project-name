@@ -1,10 +1,13 @@
+FROM node:21-alpine3.18 as build
+WORKDIR /app
+ADD *.json .
+RUN npm ci
+COPY . .
+RUN npm run build
+
 FROM node:21-alpine3.18
 WORKDIR /app
-COPY package*.json ./
-COPY . .
-RUN npm install
-RUN npm install prisma
-RUN npm run build
-RUN rm -rf ./src
-
-CMD ["npm", "run", "start:prod"]
+COPY --from=build /app/dist ./dist
+ADD *.json .
+RUN npm ci --omit=dev
+CMD [ "node", "./dist/main.js" ]
