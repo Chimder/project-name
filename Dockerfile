@@ -1,14 +1,8 @@
-FROM node:21-alpine3.18 as build
+FROM node:21-alpine
 WORKDIR /app
-ADD *.json .
-RUN npm ci
+COPY package*.json ./
 COPY . .
+RUN npm install
 RUN npm run build
-
-FROM node:21-alpine3.18
-WORKDIR /app
-COPY --from=build /app/dist ./dist
-ADD *.json .
-RUN npm ci --only=production
-# EXPOSE 000
-CMD [ "npm", "run", "start:dev" ]
+EXPOSE 8000
+CMD ["npm", "run", "start:prod"]
