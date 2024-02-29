@@ -15,18 +15,30 @@ services:
       PORT: 4000
       DATABASE_URL: ${DATABASE_URL}
     working_dir: /app
+    links:
+      - redis
+    env_file:
+      - .env
+    networks:
+      - webnet
     depends_on:
       - redis
 
   redis:
-    container_name: redis-db
+    container_name: redis
     image: redis
-    environment:
-      - REDIS_PORT=6379
+    restart: unless-stopped
     ports:
       - 6379:6379
-    networks:
-      - backend_network
-    restart: unless-stopped
     volumes:
       - redis:/data
+    networks:
+      - webnet
+    # environment:
+    #   - REDIS_PORT=6379
+
+volumes:
+  redis:
+
+networks:
+  webnet:
